@@ -20,10 +20,26 @@ func HandleAll() {
 	http.HandleFunc("/api/play-pause", handlePlayPause)
 	http.HandleFunc("/api/next", handleNext)
 	http.HandleFunc("/api/previous", handlePrev)
+	http.HandleFunc("/api/fiveplus", handleFivePlus)
+	http.HandleFunc("/api/fiveminus", handleFiveMinus)
 
 	err := http.ListenAndServe(ip, nil)
 	if err != nil {
 		fmt.Printf("Error starting server: %s\n", err)
+	}
+}
+
+func handleFiveMinus(w http.ResponseWriter, r *http.Request) {
+	e := playerctl("5 seconds backwards?? from server", "position", "5-")
+	if e != nil {
+		log.Print("Error running playerctl")
+	}
+}
+
+func handleFivePlus(w http.ResponseWriter, r *http.Request) {
+	e := playerctl("5 seconds forward?? from server", "position", "5+")
+	if e != nil {
+		log.Print("Error running playerctl")
 	}
 }
 
