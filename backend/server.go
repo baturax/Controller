@@ -1,0 +1,59 @@
+package backend
+
+import (
+	"fmt"
+	"log"
+	"net"
+	"net/http"
+	"os/exec"
+)
+
+func HandleAll() {
+	i, p := readConfig()
+
+	ip := net.JoinHostPort(i, p)
+
+	server := http.FileServer(http.Dir("./frontend"))
+
+	http.Handle("/", server)
+
+	http.HandleFunc("/api/play-pause", handlePlayPause)
+	http.HandleFunc("/api/next", handleNext)
+	http.HandleFunc("/api/previous", handlePrev)
+
+	err := http.ListenAndServe(ip, nil)
+	if err != nil {
+		fmt.Printf("Error starting server: %s\n", err)
+	}
+}
+
+func handlePrev(w http.ResponseWriter, r *http.Request) {
+	e := playerctl("previous from server", "previous")
+	if e != nil {
+		log.Print("Error running playerctl")
+	}
+}
+
+func handleNext(w http.ResponseWriter, r *http.Request) {
+	e := playerctl("next from server", "next")
+	if e != nil {
+		log.Print("Error running playerctl")
+	}
+}
+
+func handlePlayPause(w http.ResponseWriter, r *http.Request) {
+	e := playerctl("play-pause from server", "play-pause")
+	if e != nil {
+		log.Print("Error running playerctl")
+	}
+}
+
+func playerctl(message string, args ...string) error {
+	cmd := exec.Command("playerctl", args...)
+	notifier(message)
+	return cmd.Run()
+}
+
+func notifier(message string) {
+	log.Println(message)
+}
