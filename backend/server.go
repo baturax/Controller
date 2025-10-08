@@ -33,7 +33,7 @@ func HandleAll() {
 func sendInfo(w http.ResponseWriter, r *http.Request) {
 	out, err := exec.Command("playerctl", "metadata", "-f", `{"playername":"{{playerName}}","position":"{{duration(position)}}","status":"{{status}}","volume":"{{volume}}","album":"{{xesam:album}}","artist":"{{xesam:artist}}","title":"{{xesam:title}}"}`).Output()
 	if err != nil {
-		log.Print("Error running playerctl")
+		log.Print("Error running playerctl ", err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -43,35 +43,35 @@ func sendInfo(w http.ResponseWriter, r *http.Request) {
 func handleFiveMinus(w http.ResponseWriter, r *http.Request) {
 	e := playerctl("5 seconds backwards?? from server", "position", "5-")
 	if e != nil {
-		log.Print("Error running playerctl")
+		log.Print("Error running playerctl ", e)
 	}
 }
 
 func handleFivePlus(w http.ResponseWriter, r *http.Request) {
 	e := playerctl("5 seconds forward?? from server", "position", "5+")
 	if e != nil {
-		log.Print("Error running playerctl")
+		log.Print("Error running playerctl ", e)
 	}
 }
 
 func handlePrev(w http.ResponseWriter, r *http.Request) {
 	e := playerctl("previous from server", "previous")
 	if e != nil {
-		log.Print("Error running playerctl")
+		log.Print("Error running playerctl ", e)
 	}
 }
 
 func handleNext(w http.ResponseWriter, r *http.Request) {
 	e := playerctl("next from server", "next")
 	if e != nil {
-		log.Print("Error running playerctl")
+		log.Print("Error running playerctl ", e)
 	}
 }
 
 func handlePlayPause(w http.ResponseWriter, r *http.Request) {
 	e := playerctl("play-pause from server", "play-pause")
 	if e != nil {
-		log.Print("Error running playerctl")
+		log.Print("Error running playerctl ", e)
 	}
 }
 
