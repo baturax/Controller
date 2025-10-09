@@ -24,8 +24,12 @@ Control your device's media playback locally with ease.
 - Or build with go build . and run ./Controller
 
 ### Infos
-- Config file is inside ($XDG_CONFIG_HOME/$HOME/.config)/Controller/config.json
+- Config file is inside ```($XDG_CONFIG_HOME||$HOME/.config)/Controller/config.json```
 - make sure path has the frontend folder
+- Navigation: 
+- * Space to play/pause
+- * Left/Right arrow for previous/next
+- * Up/Down arrow to Skip forward 5 seconds/Skip back 5 seconds
 
 ## Contributions  
 Feel free to open PRs! Suggestions and improvements are always welcome.
