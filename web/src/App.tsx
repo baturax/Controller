@@ -1,4 +1,4 @@
-import { createSignal, onMount, Show, type Component } from "solid-js";
+import { createSignal, onCleanup, onMount, Show, type Component } from "solid-js";
 
 import styles from "./App.module.css";
 
@@ -35,7 +35,41 @@ const App: Component = () => {
 
   onMount(() => {
     bai();
+
+    const keys = (e: KeyboardEvent) => {
+      switch (e.code) {
+        case "ArrowLeft":
+          e.preventDefault();
+          Previous();
+          break;
+
+        case "Space":
+          e.preventDefault();
+          PlayPause();
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          Next();
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          BackFive();
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          NextFive();
+          break;
+      }
+    }
+
+    window.addEventListener("keydown", keys);
+
+    onCleanup(() => {
+      window.removeEventListener("keydown", keys)
+    })
+
   });
+
 
   setInterval(() => {
     bai();
@@ -46,13 +80,13 @@ const App: Component = () => {
       <header class={styles.header}>
         <Show when={playerInfo().status == "Playing"}>
           <button id="play-pause-btn" onClick={PlayPause}>
-            <img src={PauseButton}/>
+            <img src={PauseButton} />
           </button>
         </Show>
 
         <Show when={playerInfo().status == "Paused"}>
           <button id="play-pause-btn" onClick={PlayPause}>
-            <img src={PlayButton}/>
+            <img src={PlayButton} />
           </button>
         </Show>
 
@@ -70,8 +104,8 @@ const App: Component = () => {
 
         <div class={styles.controller}>
           <div class={styles["controller-left"]}>
-            <button onClick={Previous}><img src={PreviousButton}/></button>
-            <button onClick={BackFive}><img src={Prev5Button}/></button>
+            <button onClick={Previous}><img src={PreviousButton} /></button>
+            <button onClick={BackFive}><img src={Prev5Button} /></button>
           </div>
 
           <div class={styles["controller-center"]}>
@@ -81,8 +115,8 @@ const App: Component = () => {
           </div>
 
           <div class={styles["controller-right"]}>
-            <button onClick={NextFive}><img src={Next5Button}/></button>
-            <button onClick={Next}><img src={NextButton}/></button>
+            <button onClick={NextFive}><img src={Next5Button} /></button>
+            <button onClick={Next}><img src={NextButton} /></button>
           </div>
         </div>
       </header>
