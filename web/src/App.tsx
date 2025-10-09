@@ -22,7 +22,7 @@ const App: Component = () => {
   });
 
   function bai() {
-    fetch("http://192.168.1.161:31313/api/info")
+    fetch("/api/info")
       .then((response) => {
         if (!response.ok) throw new Error("HTTP error " + response.status);
         return response.json();
