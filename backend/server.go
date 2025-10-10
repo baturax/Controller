@@ -17,12 +17,12 @@ func HandleAll() {
 
 	http.Handle("/", server)
 
-	http.HandleFunc("/api/play-pause", handlePlayPause)
-	http.HandleFunc("/api/next", handleNext)
-	http.HandleFunc("/api/previous", handlePrev)
-	http.HandleFunc("/api/fiveplus", handleFivePlus)
-	http.HandleFunc("/api/fiveminus", handleFiveMinus)
-	http.HandleFunc("/api/info", sendInfo)
+	http.HandleFunc("/api/play-pause", cors(handlePlayPause))
+	http.HandleFunc("/api/next", cors(handleNext))
+	http.HandleFunc("/api/previous", cors(handlePrev))
+	http.HandleFunc("/api/fiveplus", cors(handleFivePlus))
+	http.HandleFunc("/api/fiveminus", cors(handleFiveMinus))
+	http.HandleFunc("/api/info", cors(sendInfo))
 
 	fmt.Println("Started at: ", ip)
 
@@ -31,6 +31,21 @@ func HandleAll() {
 		fmt.Printf("Error starting server: %s\n", err)
 	}
 }
+
+func cors(h http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == "OPTIONS" {
+			return
+		}
+
+		h(w, r)
+	}
+}
+
 
 func sendInfo(w http.ResponseWriter, r *http.Request) {
 	out, err := exec.Command("playerctl", "metadata", "-f", `{"playername":"{{playerName}}","position":"{{duration(position)}}","status":"{{status}}","volume":"{{volume}}","album":"{{xesam:album}}","artist":"{{xesam:artist}}","title":"{{xesam:title}}", "length": "{{duration(mpris:length)}}"}`).Output()
