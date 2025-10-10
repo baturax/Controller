@@ -24,6 +24,8 @@ func HandleAll() {
 	http.HandleFunc("/api/fiveminus", handleFiveMinus)
 	http.HandleFunc("/api/info", sendInfo)
 
+	fmt.Println("Started at: ", ip)
+
 	err := http.ListenAndServe(ip, nil)
 	if err != nil {
 		fmt.Printf("Error starting server: %s\n", err)
