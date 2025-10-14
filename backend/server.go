@@ -96,14 +96,14 @@ func sendInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleForward5Sec(w http.ResponseWriter, r *http.Request) {
-	e := playerctl("Got 5 seconds forward from server", "position", "5-")
+	e := playerctl("Got 5 seconds forward from server", "position", "5+")
 	if e != nil {
 		log.Printf("Error running playerctl %v", e)
 	}
 }
 
 func handleRewind5Sec(w http.ResponseWriter, r *http.Request) {
-	e := playerctl("Got 5 Second Backwards from server", "position", "5+")
+	e := playerctl("Got 5 Second Backwards from server", "position", "5-")
 	if e != nil {
 		log.Printf("Error running playerctl %v", e)
 	}
