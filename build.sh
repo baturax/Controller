@@ -16,4 +16,6 @@ mv ./dist/* ../backend/frontend
 
 cd ..
 
+go build
+
 ./Controller
