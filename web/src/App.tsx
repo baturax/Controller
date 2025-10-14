@@ -15,10 +15,12 @@ import Prev5Button from "./assets/replay5.svg";
 import Next5Button from "./assets/forward5.svg";
 import IncVolumeButton from "./assets/incvolume.svg"
 import DecVolumeButton from "./assets/lowervolume.svg"
+import { onStart } from "./components/mount";
 
 const App: Component = () => {
 
-  
+  onStart();
+
   setInterval(() => {
     fetchThem();
   }, 500);
@@ -66,11 +68,8 @@ const App: Component = () => {
             <button onClick={NextFive}><img src={Next5Button} /></button>
             <button onClick={Next}><img src={NextButton} /></button>
           </div>
-
-          <div class={styles["controllerdsadas"]}>
-            <button onClick={IncVolume}><img src={IncVolumeButton} /></button>
-            <button onClick={DecVolume}><img src={DecVolumeButton} /></button>
-          </div>
+          <button onClick={IncVolume}><img src={IncVolumeButton} /></button>
+          <button onClick={DecVolume}><img src={DecVolumeButton} /></button>
         </div>
       </header>
     </div>
