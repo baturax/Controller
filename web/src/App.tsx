@@ -2,6 +2,11 @@ import { createSignal, onCleanup, onMount, Show, type Component } from "solid-js
 
 import styles from "./App.module.css";
 
+import { Previous, PlayPause, Next, BackFive, NextFive, IncVolume, DecVolume } from "./components/functions";
+import { keys } from "./components/keys";
+
+import { fetchThem, playerInfo, setPlayerInfo } from "./components/fetcher";
+
 import PlayButton from "./assets/play.svg";
 import PauseButton from "./assets/pause.svg";
 import PreviousButton from "./assets/previous.svg";
@@ -12,69 +17,10 @@ import IncVolumeButton from "./assets/incvolume.svg"
 import DecVolumeButton from "./assets/lowervolume.svg"
 
 const App: Component = () => {
-  const [playerInfo, setPlayerInfo] = createSignal({
-    playername: "",
-    position: "",
-    status: "",
-    volume: "",
-    album: "",
-    artist: "",
-    title: "",
-    length: "",
-  });
 
-  function bai() {
-    fetch("/api/info")
-      .then((response) => {
-        if (!response.ok) throw new Error("HTTP error " + response.status);
-        return response.json();
-      })
-      .then((data) => {
-        setPlayerInfo(data);
-      })
-      .catch((err) => console.error("Fetch error:", err));
-  }
-
-  onMount(() => {
-    bai();
-
-    const keys = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case "ArrowLeft":
-          e.preventDefault();
-          Previous();
-          break;
-
-        case "Space":
-          e.preventDefault();
-          PlayPause();
-          break;
-        case "ArrowRight":
-          e.preventDefault();
-          Next();
-          break;
-        case "ArrowDown":
-          e.preventDefault();
-          BackFive();
-          break;
-        case "ArrowUp":
-          e.preventDefault();
-          NextFive();
-          break;
-      }
-    }
-
-    window.addEventListener("keydown", keys);
-
-    onCleanup(() => {
-      window.removeEventListener("keydown", keys)
-    })
-
-  });
-
-
+  
   setInterval(() => {
-    bai();
+    fetchThem();
   }, 500);
 
   return (
@@ -131,46 +77,6 @@ const App: Component = () => {
   );
 };
 
-function Previous() {
-  fetch("/api/previous").then(function () {
-    console.log("Previous K");
-  });
-}
 
-function PlayPause() {
-  fetch("/api/play-pause").then(function () {
-    console.log("Play/Pause K");
-  });
-}
-
-function Next() {
-  fetch("/api/next").then(function () {
-    console.log("Next K");
-  });
-}
-
-function BackFive() {
-  fetch("/api/fiveminus").then(function () {
-    console.log("5 Seconds Minus K");
-  });
-}
-
-function NextFive() {
-  fetch("/api/fiveplus").then(function () {
-    console.log("5 Seconds Plus K");
-  });
-}
-
-function IncVolume() {
-  fetch("/api/uppervolume").then(function(){
-    console.log("+5 volume okay");
-  })
-}
-
-function DecVolume() {
-  fetch("/api/lowervolume").then(function(){
-    console.log("-5 volume okay");
-  })
-}
 
 export default App;

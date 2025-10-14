@@ -1,0 +1,41 @@
+export function Previous() {
+  fetch("/api/previous").then(function () {
+    console.log("Previous K");
+  });
+}
+
+export function PlayPause() {
+  fetch("/api/play-pause").then(function () {
+    console.log("Play/Pause K");
+  });
+}
+
+export function Next() {
+  fetch("/api/next").then(function () {
+    console.log("Next K");
+  });
+}
+
+export function BackFive() {
+  fetch("/api/fiveminus").then(function () {
+    console.log("5 Seconds Minus K");
+  });
+}
+
+export function NextFive() {
+  fetch("/api/fiveplus").then(function () {
+    console.log("5 Seconds Plus K");
+  });
+}
+
+export function IncVolume() {
+  fetch("/api/uppervolume").then(function(){
+    console.log("+5 volume okay");
+  })
+}
+
+export function DecVolume() {
+  fetch("/api/lowervolume").then(function(){
+    console.log("-5 volume okay");
+  })
+}
