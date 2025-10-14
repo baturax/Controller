@@ -10,6 +10,8 @@ bun run build
 
 rm -rf ../frontend/*
 
+mkdir ../frontend
+
 mv ./dist/* ../frontend -f
 
 cd ..
