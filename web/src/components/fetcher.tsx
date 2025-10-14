@@ -9,6 +9,7 @@ export const [playerInfo, setPlayerInfo] = createSignal({
     artist: "",
     title: "",
     length: "",
+    artUrl: "",
 });
 
 export function fetchThem() {

@@ -86,7 +86,7 @@ func handleVolumeDown(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendInfo(w http.ResponseWriter, r *http.Request) {
-	out, e := exec.Command("playerctl", "metadata", "-f", `{"playername":"{{playerName}}","position":"{{duration(position)}}","status":"{{status}}","volume":"{{volume}}","album":"{{xesam:album}}","artist":"{{xesam:artist}}","title":"{{xesam:title}}", "length": "{{duration(mpris:length)}}"}`).Output()
+	out, e := exec.Command("playerctl", "metadata", "-f", `{"playername":"{{playerName}}","position":"{{duration(position)}}","status":"{{status}}","volume":"{{volume}}","album":"{{xesam:album}}","artist":"{{xesam:artist}}","title":"{{xesam:title}}", "length": "{{duration(mpris:length)}}","arturl":"{{mpris:artUrl}}"}`).Output()
 	if e != nil {
 		log.Printf("Error running playerctl %v", e)
 	}
