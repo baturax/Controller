@@ -22,6 +22,9 @@ func HandleAll() {
 	http.HandleFunc("/api/previous", cors(handlePrev))
 	http.HandleFunc("/api/fiveplus", cors(handleFivePlus))
 	http.HandleFunc("/api/fiveminus", cors(handleFiveMinus))
+	http.HandleFunc("/api/lowervolume", cors(handleLowerVolume))
+	http.HandleFunc("/api/uppervolume", cors(handleUpVolume))
+
 	http.HandleFunc("/api/info", cors(sendInfo))
 
 	fmt.Println("Started at: ", ip)
@@ -31,6 +34,7 @@ func HandleAll() {
 		fmt.Printf("Error starting server: %s\n", err)
 	}
 }
+
 
 func cors(h http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -46,6 +50,21 @@ func cors(h http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+func handleUpVolume(w http.ResponseWriter, r *http.Request) {
+	e := exec.Command("wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.05+").Run()
+	if e != nil {
+		log.Print("Error running wpctl", e)
+	}
+	notifier("Up Volume from server")
+}
+
+func handleLowerVolume(w http.ResponseWriter, r *http.Request) {
+	e := exec.Command("wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.05-").Run()
+	if e != nil {
+		log.Print("Error running wpctl", e)
+	}
+	notifier("Lower Volume from server")
+}
 
 func sendInfo(w http.ResponseWriter, r *http.Request) {
 	out, err := exec.Command("playerctl", "metadata", "-f", `{"playername":"{{playerName}}","position":"{{duration(position)}}","status":"{{status}}","volume":"{{volume}}","album":"{{xesam:album}}","artist":"{{xesam:artist}}","title":"{{xesam:title}}", "length": "{{duration(mpris:length)}}"}`).Output()
