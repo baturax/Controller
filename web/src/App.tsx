@@ -8,6 +8,8 @@ import PreviousButton from "./assets/previous.svg";
 import NextButton from "./assets/next.svg";
 import Prev5Button from "./assets/replay5.svg";
 import Next5Button from "./assets/forward5.svg";
+import IncVolumeButton from "./assets/incvolume.svg"
+import DecVolumeButton from "./assets/lowervolume.svg"
 
 const App: Component = () => {
   const [playerInfo, setPlayerInfo] = createSignal({
@@ -118,6 +120,11 @@ const App: Component = () => {
             <button onClick={NextFive}><img src={Next5Button} /></button>
             <button onClick={Next}><img src={NextButton} /></button>
           </div>
+
+          <div class={styles["controllerdsadas"]}>
+            <button onClick={IncVolume}><img src={IncVolumeButton} /></button>
+            <button onClick={DecVolume}><img src={DecVolumeButton} /></button>
+          </div>
         </div>
       </header>
     </div>
@@ -152,6 +159,18 @@ function NextFive() {
   fetch("/api/fiveplus").then(function () {
     console.log("5 Seconds Plus K");
   });
+}
+
+function IncVolume() {
+  fetch("/api/uppervolume").then(function(){
+    console.log("+5 volume okay");
+  })
+}
+
+function DecVolume() {
+  fetch("/api/lowervolume").then(function(){
+    console.log("-5 volume okay");
+  })
 }
 
 export default App;
