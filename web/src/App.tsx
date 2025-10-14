@@ -14,7 +14,7 @@ import NextButton from "./assets/next.svg";
 import Prev5Button from "./assets/rewind-5-sec.svg";
 import Next5Button from "./assets/forward-5-sec.svg";
 import IncVolumeButton from "./assets/volume-up.svg"
-import DecVolumeButton from "./assets/volume-up.svg"
+import DecVolumeButton from "./assets/volume-down.svg"
 import { onStart } from "./components/mount";
 
 const App: Component = () => {
