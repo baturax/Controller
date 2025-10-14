@@ -8,11 +8,11 @@ bun install
 
 bun run build
 
-rm -rf ../frontend/*
+rm -rf ../backend/frontend
 
-mkdir ../frontend
+mkdir ../backend/frontend
 
-mv ./dist/* ../frontend -f
+mv ./dist/* ../backend/frontend
 
 cd ..
 

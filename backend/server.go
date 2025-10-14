@@ -1,21 +1,29 @@
 package backend
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
 	"log"
 	"net"
 	"net/http"
 	"os/exec"
 )
 
+//go:embed frontend/*
+var frontend embed.FS
+
 func HandleAll() {
 	i, p := readConfig()
 
 	ip := net.JoinHostPort(i, p)
 
-	server := http.FileServer(http.Dir("./frontend"))
+	webFS, err := fs.Sub(frontend, "frontend")
+	if err != nil {
+		log.Fatalf("Error reading embedded frontend: %v", err)
+	}
 
-	http.Handle("/", server)
+	http.Handle("/", http.FileServer(http.FS(webFS)))
 
 	routes := map[string]http.HandlerFunc{
 		"/api/play-pause":    handlePlayPause,
@@ -34,7 +42,7 @@ func HandleAll() {
 
 	fmt.Println("Started at: ", ip)
 
-	err := http.ListenAndServe(ip, nil)
+	err = http.ListenAndServe(ip, nil)
 	if err != nil {
 		fmt.Printf("Error starting server: %s\n", err)
 	}
