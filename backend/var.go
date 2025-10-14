@@ -8,4 +8,5 @@ const (
 type ConfigStruct struct {
 	Ip   string `json:"ip"`
 	Port string `json:"port"`
+	CustomDir string `json:"customdir"`
 }

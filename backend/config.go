@@ -13,7 +13,7 @@ func Config() {
 	readConfig()
 }
 
-func readConfig() (string, string) {
+func readConfig() (string, string, string) {
 	f := getConfig()
 	file, err := os.Open(f)
 	if err != nil {
@@ -25,7 +25,7 @@ func readConfig() (string, string) {
 	var c ConfigStruct
 
 	json.Unmarshal(bValue, &c)
-	return c.Ip, c.Port
+	return c.Ip, c.Port, c.CustomDir
 }
 
 func getConfig() string {
@@ -60,6 +60,7 @@ func writeConfig() {
 	defaultVal := &ConfigStruct{
 		Ip: "0.0.0.0",
 		Port: "31311",
+		CustomDir: "",
 	}
 	bytes, _ := json.MarshalIndent(defaultVal, "", "\t")
 	os.WriteFile(getConfig(), bytes, 0644)

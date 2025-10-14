@@ -14,7 +14,7 @@ import (
 var frontend embed.FS
 
 func HandleAll() {
-	i, p := readConfig()
+	i, p, c := readConfig()
 
 	ip := net.JoinHostPort(i, p)
 
@@ -23,7 +23,14 @@ func HandleAll() {
 		log.Fatalf("Error reading embedded frontend: %v", err)
 	}
 
-	http.Handle("/", http.FileServer(http.FS(webFS)))
+	if c != "" {
+		log.Println("Using Custom UI provided in config:", c)
+		http.Handle("/", http.FileServer(http.Dir(c)))
+	} else {
+		log.Println("Using Built-in UI")
+		http.Handle("/", http.FileServer(http.FS(webFS)))
+
+	}
 
 	routes := map[string]http.HandlerFunc{
 		"/api/play-pause":    handlePlayPause,
