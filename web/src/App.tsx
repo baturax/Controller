@@ -11,10 +11,10 @@ import PlayButton from "./assets/play.svg";
 import PauseButton from "./assets/pause.svg";
 import PreviousButton from "./assets/previous.svg";
 import NextButton from "./assets/next.svg";
-import Prev5Button from "./assets/replay5.svg";
-import Next5Button from "./assets/forward5.svg";
-import IncVolumeButton from "./assets/incvolume.svg"
-import DecVolumeButton from "./assets/lowervolume.svg"
+import Prev5Button from "./assets/rewind-5-sec.svg";
+import Next5Button from "./assets/forward-5-sec.svg";
+import IncVolumeButton from "./assets/volume-up.svg"
+import DecVolumeButton from "./assets/volume-up.svg"
 import { onStart } from "./components/mount";
 
 const App: Component = () => {
@@ -75,7 +75,5 @@ const App: Component = () => {
     </div>
   );
 };
-
-
 
 export default App;
