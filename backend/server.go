@@ -3,14 +3,18 @@ package backend
 import (
 	"embed"
 	"fmt"
+	"io"
 	"io/fs"
 	"log"
 	"net"
 	"net/http"
+	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 )
 
-//go:embed frontend/*
+//go:embed frontend/*.*
 var frontend embed.FS
 
 func HandleAll() {
@@ -86,13 +90,40 @@ func handleVolumeDown(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendInfo(w http.ResponseWriter, r *http.Request) {
-	out, e := exec.Command("playerctl", "metadata", "-f", `{"playername":"{{playerName}}","position":"{{duration(position)}}","status":"{{status}}","volume":"{{volume}}","album":"{{xesam:album}}","artist":"{{xesam:artist}}","title":"{{xesam:title}}", "length": "{{duration(mpris:length)}}","arturl":"{{mpris:artUrl}}"}`).Output()
-	if e != nil {
-		log.Printf("Error running playerctl %v", e)
-	}
+    out, e := exec.Command("playerctl", "metadata", "-f", `{"playername":"{{playerName}}","position":"{{duration(position)}}","status":"{{status}}","volume":"{{volume}}","album":"{{xesam:album}}","artist":"{{xesam:artist}}","title":"{{xesam:title}}", "length": "{{duration(mpris:length)}}","arturl":"{{mpris:artUrl}}"}`).Output()
+    if e != nil {
+        log.Printf("Error running playerctl %v", e)
+    }
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(out)
+    data := string(out)
+
+    start := strings.Index(data, `"arturl":"file://`)
+    if start != -1 {
+        start += len(`"arturl":"file://`)
+        end := strings.Index(data[start:], `"`)
+        if end != -1 {
+            tmpPath := data[start : start+end]
+
+            filename := "art"
+
+            _, _, c := readConfig()
+            var publicPath string
+            if c != "" {
+                publicPath = filepath.Join(c, "public", filename)
+            } else {
+                publicPath = filepath.Join("frontend", "public", filename)
+            }
+
+            if err := copyFile(tmpPath, publicPath); err != nil {
+                log.Printf("Arturl copy error: %v", err)
+            }
+
+            data = data[:start] + "/public/" + filename + data[start+end:]
+        }
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    w.Write([]byte(data))
 }
 
 func handleForward5Sec(w http.ResponseWriter, r *http.Request) {
@@ -138,4 +169,27 @@ func playerctl(message string, args ...string) error {
 
 func notifier(message string) {
 	log.Println(message)
+}
+
+func copyFile(src, dst string) error {
+    src = strings.TrimPrefix(src, "file://")
+
+    if err := os.MkdirAll(filepath.Dir(dst), 0755); err != nil {
+        return err
+    }
+
+    from, err := os.Open(src)
+    if err != nil {
+        return err
+    }
+    defer from.Close()
+
+    to, err := os.Create(dst)
+    if err != nil {
+        return err
+    }
+    defer to.Close()
+
+    _, err = io.Copy(to, from)
+    return err
 }
