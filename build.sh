@@ -1,7 +1,5 @@
 #/bin/sh
 
-go build .
-
 cd ./web
 
 bun install
