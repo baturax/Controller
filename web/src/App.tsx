@@ -23,11 +23,14 @@ const App: Component = () => {
 
   setInterval(() => {
     fetchThem();
+    updateArt();
   }, 500);
 
   return (
     <div class={styles.App}>
       <header class={styles.header}>
+        <img src="./public/art" alt="bai" id="art-id" />
+
         <Show when={playerInfo().status == "Playing"}>
           <button id="play-pause-btn" onClick={PlayPause}>
             <img src={PauseButton} />
@@ -75,5 +78,12 @@ const App: Component = () => {
     </div>
   );
 };
+
+function updateArt() {
+  var pic = document.getElementById("art-id") as HTMLImageElement;
+  if (pic) {
+    pic.src = `./public/art?${Date.now()}`;
+  }
+}
 
 export default App;
