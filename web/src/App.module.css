@@ -96,3 +96,8 @@ button:hover {
   border-radius: 3px;
   transition: width 0.3s ease-in-out;
 }
+
+.artclass:hover, .artclass:focus, .artclass:active {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}

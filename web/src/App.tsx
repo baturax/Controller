@@ -29,7 +29,7 @@ const App: Component = () => {
   return (
     <div class={styles.App}>
       <header class={styles.header}>
-        <img src="./public/art" alt="bai" id="art-id" />
+        <img src="./public/art" alt="bai" class={styles.artclass} />
 
         <Show when={playerInfo().status == "Playing"}>
           <button id="play-pause-btn" onClick={PlayPause}>
